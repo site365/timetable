@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>직원 근무 시간관리 쉽게하는 타임테이블 도우미</title>
+  <title>직원 근로시간관리 쉽게하는 타임테이블툴</title>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 
@@ -38,7 +38,7 @@
 <body>
 <nav class="site-nav"><div class="wordmark">TIME TABLE<small>PEOPLE &amp; HOSPITALITY</small></div><span class="nav-note">직원 근로시간관리 쉽게하는 타임테이블툴</span></nav>
 <main class="wrap" id="adminApp">
-  <header class="top"><div class="brand"><h1>직원 근무 시간관리 쉽게하는 타임테이블 도우미</h1><p>출퇴근·근로시간·휴무·연차·반차를 월별로 기록하고 자동 계산합니다.</p></div><span class="admin-badge" id="adminState">열람 모드</span></header>
+  <header class="top"><div class="brand"><h1>직원 근로시간관리 쉽게하는 타임테이블툴</h1><p>출퇴근·근로시간·휴무·연차·반차를 월별로 기록하고 자동 계산합니다.</p></div><span class="admin-badge" id="adminState">열람 모드</span></header>
   <section class="welcome"><span class="eyebrow">STAFF SCHEDULE &amp; REST CALCULATOR</span><h2 id="welcomeTitle">직원 시간표·휴무일<br>자동 산출기</h2><p id="welcomeText">직원별 근무시간과 휴무 사용 현황을 기록하고, 월별 잔여 휴무와 근무량을 한눈에 확인합니다.</p><div class="welcome-actions"><button id="shareSchedule" class="admin-only hidden">일정표 공유하기 ↗</button></div></section>
   <section class="panel"><div class="section-head"><div><h2>조회할 월 선택</h2><small>선택한 월을 기준으로 시간표·휴무·연차·그래프를 함께 계산합니다.</small></div></div><div class="toolbar"><button id="prevMonth">←</button><select id="year"></select><select id="month"></select><button id="nextMonth">→</button><button class="btn primary admin-only hidden" id="addHoliday">공휴일 추가</button><button class="btn admin-only hidden" id="addEmployee">직원 추가</button><button class="btn admin-only hidden" id="exportData">백업</button><label class="btn admin-only hidden">복원<input id="importData" type="file" accept="application/json" hidden></label></div></section>
   <section class="panel"><div class="section-head schedule-head"><div><h2 id="scheduleTitle">전체 직원 시간표 보기</h2><small id="editHint">관리자 로그인 후 수정할 수 있습니다.</small></div><div class="view-tools"><button class="view-btn active" data-view="week">월별 주간 스케줄</button><button class="view-btn" data-view="all">전체 월 달력</button><button class="view-btn" data-view="day">일일 달력</button><button class="view-btn" data-view="off">전체 직원 휴무 달력</button><button class="view-btn" data-view="person">직원 개인 일정</button><select id="employeePicker" class="employee-picker hidden"></select></div></div><div class="time-legend"><span class="time-key"><i class="early"></i>7–8시</span><span class="time-key"><i class="morning"></i>9–10시</span><span class="time-key"><i class="midday"></i>11–12시</span><span class="time-key"><i class="late"></i>13시 이후</span><span class="time-key"><i class="off"></i>휴무</span></div><div class="table-scroll"><div id="monthView" class="hidden"></div><table class="schedule" id="schedule"></table></div><div class="week-nav" id="weekNav"><button id="prevWeek">이전 주</button><strong id="weekLabel"></strong><button id="nextWeek">다음 주</button></div></section>
@@ -49,7 +49,7 @@
   <section class="panel"><div class="section-head"><div><h2>직원별 근무시간 기준</h2><p class="work-time-summary">출근·퇴근과 휴게 유형을 구분하여 기록합니다. 조기퇴근 대체시간은 실제 체류시간에서 다시 차감하지 않습니다.</p></div><button class="btn primary admin-only hidden" id="editWorkTime">근무시간 입력·수정</button></div><div class="table-scroll"><table class="work-time-table" id="workTimeTable"></table></div></section>
   <section class="panel hidden" id="dailyWorkPanel"><div class="section-head"><div><h2 id="dailyWorkTitle">직원 일자별 근무시간 기록</h2><p class="work-time-summary">각 날짜의 출근·퇴근과 휴게 유형을 구분해 기록합니다. 조기퇴근 대체시간은 퇴근시간에 이미 반영되므로 실근로에서 중복 차감하지 않습니다.</p></div><button class="btn" id="toggleDailyWork">근무기록 숨기기</button></div><div class="table-scroll" id="dailyWorkBody"><table class="daily-work-table" id="dailyWorkTable"></table></div></section>
   <section class="panel"><div class="section-head"><h2>월별 시간표 이미지 보관</h2><span class="chip">업로드한 이미지가 월별로 누적 저장됩니다</span></div><div class="photo-grid"><div class="drop" id="drop" tabindex="0"><div><b>지배인/대표님 시간표 이미지</b><p>관리자 로그인 후 파일을 선택하거나 이미지를 붙여넣으세요.</p><p><input id="imageInput" type="file" accept="image/*" disabled></p><p><button class="btn primary admin-only hidden" id="runOcr">이미지 읽고 자동 반영</button></p></div></div><div><div class="ocr-log" id="ocrLog">저장된 이미지가 없습니다.</div></div></div><div class="image-history" id="imageHistory"></div></section>
-  <section class="panel"><div class="section-head"><h2>월별 휴무 사용·잔여</h2><button class="btn admin-only hidden" id="setOffQuota">직원별 기본 휴무 설정</button></div><p style="font-size:12px;color:var(--muted)">일반 휴무와 공휴일 몫을 별도로 집계합니다. 공휴일은 등록된 날짜마다 1일이며, 다른 달에 당겨 쓰거나 나중에 써도 원래 공휴일의 월에서 차감합니다. 기본 휴무는 회사 기준으로 설정하세요.</p><div class="balance-list" id="balances"></div></section>
+  <section class="panel"><div class="section-head"><h2>월별 휴무 사용·잔여</h2><button class="btn admin-only hidden" id="setOffQuota">직원별 기본 휴무 설정</button></div><p style="font-size:12px;color:var(--muted)">일반 휴무와 공휴일 몫을 구분해 집계합니다. <b>미사용 휴무 이월은 2026년 9월부터 시작하며, 2026년 8월 잔여분은 9월로 이월하지 않습니다.</b> 공휴일 몫은 원래 공휴일의 사용 기록을 유지합니다.</p><div class="balance-list" id="balances"></div></section>
   <section class="panel"><div class="section-head"><div><h2>직원별 연차·반차 발생 및 잔여</h2><small>첫 출근일과 기록된 결근·연차·반차를 기준으로 계산합니다. 반차 2회는 연차 1일로 환산됩니다.</small></div></div><div class="leave-balance-grid" id="annualBalances"></div></section>
 <section class="panel"><div class="section-head"><h2>직원별 월간 현황</h2><small>일반 휴무 잔여 = 설정한 기본 휴무 − 일반 휴무 사용</small></div><div class="table-scroll"><table class="stats" id="stats"></table></div></section>
   <section class="panel"><div class="section-head"><h2>근무 편중 분석</h2><label><input type="checkbox" id="analysisToggle" checked> 분석 보기</label></div><div class="analysis-grid" id="analysis"></div></section>
@@ -64,13 +64,58 @@
 <div class="modal" id="employeeProfileModal"><div class="dialog"><h3>직원 연차 기준 설정</h3><p id="employeeProfileName"></p><label for="hireDate">첫 출근일</label><input id="hireDate" type="date"><label for="annualOverride">관리자 연차 조정값(일)</label><input id="annualOverride" type="number" min="-50" max="100" step="0.5" value="0"><small>1년 미만은 첫 출근일 기준 1개월 개근마다 1일(최대 11일), 1년 이상은 기본 15일을 계산한 뒤 조정값을 반영합니다. 결근이 기록된 월은 개근 발생에서 제외됩니다.</small><div class="actions"><button class="btn" data-close>취소</button><button class="btn primary" id="saveEmployeeProfile">저장</button></div></div></div>
 <script>
 const EMPLOYEES=['임영준','박선영','최일웅','김정민','김은진','파트'];
-const SHIFTS=['','7출','8출','9출','10출','11출','12출','13출','14출','15출','16출','9출~10출','휴무','연차','월차','반차(오전)','반차(오후)','병가','경조휴가','교육','지각','조퇴','결근','연장근무'];
+const SHIFTS=['','0','7출','8출','9출','10출','10.5출','10출반','11출','12출','13출','14출','15출','16출','8-15출','9출~10출','반차(오전) · 14출','휴무','연차','월차','반차(오전)','반차(오후)','병가','경조휴가','교육','지각','조퇴','결근','연장근무'];
 const HOLIDAYS={'2026-08-15':'광복절','2026-08-17':'광복절 대체공휴일','2026-09-24':'추석 연휴','2026-09-25':'추석','2026-09-26':'추석 연휴','2026-10-03':'개천절','2026-10-05':'개천절 대체공휴일','2026-10-09':'한글날','2026-12-25':'성탄절'};
+const PRESET_WEEKS=[
+ {dates:['2026-08-17','2026-08-18','2026-08-19','2026-08-20','2026-08-21','2026-08-22','2026-08-23'],rows:{
+  '임영준':['휴무','10.5출','14출','14출','휴무','10출반','10출반'],
+  '박선영':['14출','휴무','7출','7출','14출','14출','14출'],
+  '최일웅':['7출','7출','휴무','휴무','7출','7출','7출'],
+  '김정민':['7출','휴무','7출','7출','9출','9출','9출'],
+  '김은진':['','7출','7출','휴무','7출','7출','7출'],
+  '파트':['9출','9출','','9출','','','']
+ }},
+ {dates:['2026-08-24','2026-08-25','2026-08-26','2026-08-27','2026-08-28','2026-08-29','2026-08-30'],rows:{
+  '임영준':['휴무','12출','10출반','10출반','10출반','10출반','9출'],
+  '박선영':['14출','휴무','휴무','7출','14출','12출','12출'],
+  '최일웅':['7출','14출','14출','14출','휴무','14출','14출'],
+  '김정민':['휴무','7출','7출','7출','8출','8출','휴무'],
+  '김은진':['9출','9출','9출','휴무','7출','7출','7출'],
+  '파트':['8-15출','8출','','','','','8출']
+ }},
+ {dates:['2026-08-31','2026-09-01','2026-09-02','2026-09-03','2026-09-04','2026-09-05','2026-09-06'],rows:{
+  '임영준':['휴무','9출','8출','8출','휴무','10출','10출'],
+  '박선영':['9출','14출','휴무','휴무','7출','7출','7출'],
+  '최일웅':['14출','휴무','14출','14출','12출','12출','휴무'],
+  '김정민':['7출','7출','휴무','12출','14출','14출','14출'],
+  '김은진':['휴무','휴무','7출','7출','7출','9출','8출'],
+  '파트':['9출~10출','9출~10출','9출~10출','','','','']
+ }},
+ {dates:['2026-09-07','2026-09-08','2026-09-09','2026-09-10','2026-09-11','2026-09-12','2026-09-13'],rows:{
+  '임영준':['11출','9출','9출','휴무','10출','10출','9출'],
+  '박선영':['14출','14출','휴무','7출','7출','9출','9출'],
+  '최일웅':['7출','7출','7출','휴무','휴무','7출','7출'],
+  '김정민':['휴무','휴무','14출','14출','14출','14출','14출'],
+  '김은진':['9출','휴무','휴무','9출','9출','10출','10출']
+ }},
+ {dates:['2026-09-14','2026-09-15','2026-09-16','2026-09-17','2026-09-18','2026-09-19','2026-09-20'],rows:{
+  '임영준':['10출','14출','휴무','반차(오전) · 14출','8출','반차(오전) · 14출','8출'],
+  '박선영':['휴무','휴무','8출','7출','휴무','8출','7출'],
+  '최일웅':['7출','7출','7출','휴무','7출','7출','14출'],
+  '김정민':['14출','휴무','14출','14출','14출','14출','휴무'],
+  '김은진':['9출','9출','휴무','8출','8출','10출','10출'],
+  '파트':['0','9출','9출','0','9출','9출','9출']
+ }}
+];
 const KEY='toyu-attendance-v2', IMGDB='toyu-attendance-images';
 function decodeShare(){if(!location.hash.startsWith('#share='))return null;try{const encoded=location.hash.slice(7).replace(/-/g,'+').replace(/_/g,'/'),raw=atob(encoded+'='.repeat((4-encoded.length%4)%4)),json=decodeURIComponent(Array.from(raw,c=>'%'+c.charCodeAt(0).toString(16).padStart(2,'0')).join(''));return JSON.parse(json)}catch{return null}}
 function encodeShare(value){const binary=encodeURIComponent(JSON.stringify(value)).replace(/%([0-9A-F]{2})/g,(_,hex)=>String.fromCharCode(parseInt(hex,16)));return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function applyPreset(base){
+ base=base||{employees:[...EMPLOYEES],records:{},customHolidays:{},monthlyOff:8,employeeProfiles:{}};base.records=base.records||{};base.employeeProfiles=base.employeeProfiles||{};
+ if(Number(base.presetVersion||0)<1){PRESET_WEEKS.forEach(week=>Object.entries(week.rows).forEach(([name,values])=>values.forEach((shift,i)=>{if(!shift)return;const key=name+'|'+week.dates[i];if(!base.records[key]?.shift)base.records[key]={shift,memo:'사진 시간표 사전 입력',offSource:shift==='휴무'?'weekly':''}})));base.employeeProfiles['김은진']={...(base.employeeProfiles['김은진']||{}),hireDate:'2026-08-18'};base.carryoverStart='2026-09';base.presetVersion=1;localStorage.setItem(KEY,JSON.stringify(base))}return base
+}
 const shareData=decodeShare(),shareMode=Boolean(shareData);
-let state=shareData?.state||JSON.parse(localStorage.getItem(KEY)||'null')||{employees:[...EMPLOYEES],records:{},customHolidays:{},monthlyOff:8,employeeProfiles:{}};
+let state=shareData?.state||applyPreset(JSON.parse(localStorage.getItem(KEY)||'null'));
 let admin=!shareMode&&sessionStorage.getItem('toyu-admin')==='1', now=new Date(), viewYear=shareData?.year||now.getFullYear(), viewMonth=shareData?.month||(now.getMonth()+1), week=0, editing=null, editingDaily=null, viewMode='week', selectedEmployee='김은진',shareView='month',shareWeek=0,shareDay=now.getDate();
 const $=s=>document.querySelector(s), pad=n=>String(n).padStart(2,'0'), dateKey=(y,m,d)=>`${y}-${pad(m)}-${pad(d)}`;
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -212,7 +257,7 @@ function creditUsage(name,date,exclude=''){return Object.entries(state.records).
 function monthParts(y,m){let sundays=0;for(let d=1;d<=daysInMonth(y,m);d++)if(new Date(y,m-1,d).getDay()===0)sundays++;const extra=Math.round((daysInMonth(y,m)-sundays)*60/520);return{sundays,extra}}
 function previousMonth(y,m){return m===1?{y:y-1,m:12}:{y,m:m-1}}
 function monthTracked(name,y,m){const month=y+'-'+pad(m);return Object.keys(state.records||{}).some(k=>k.startsWith(name+'|'+month+'-'))||Object.prototype.hasOwnProperty.call(state.offAllowances||{},name+'|'+month)||Object.keys(state.dailyWorkSettings||{}).some(k=>k.startsWith(name+'|'+month+'-'))}
-function offBalanceFor(name,y,m,depth=0){const month=y+'-'+pad(m),parts=monthParts(y,m),manual=state.offAllowances?.[name+'|'+month],extraQuota=name==='김은진'?parts.extra:0,totalGeneral=manual??(name==='김은진'?parts.sundays+parts.extra:state.monthlyOff??8),weeklyQuota=Math.max(0,totalGeneral-extraQuota),monthRecords=Object.entries(state.records||{}).filter(([k,r])=>k.startsWith(name+'|'+month+'-')&&r.shift==='휴무'),weeklyUsed=monthRecords.filter(([,r])=>!r.holidayCredit&&(!r.offSource||r.offSource==='weekly')).length,extraUsed=monthRecords.filter(([,r])=>r.offSource==='extra').length,carryUsed=monthRecords.filter(([,r])=>r.offSource==='carryover').length,holidays=Object.entries(combinedHolidays()).filter(([d])=>d.startsWith(month+'-')).sort(),currentHolidayUsed=holidays.filter(([d])=>creditUsage(name,d).length>0).length;let carryoverQuota=0,priorHolidayRemaining=0;if(depth<120){const prev=previousMonth(y,m);if((prev.y>2025)&&monthTracked(name,prev.y,prev.m)){const p=offBalanceFor(name,prev.y,prev.m,depth+1);carryoverQuota=p.weeklyRemaining+p.extraRemaining+p.carryoverRemaining;priorHolidayRemaining=p.holidayRemaining}}const weeklyRemaining=Math.max(0,weeklyQuota-weeklyUsed),extraRemaining=Math.max(0,extraQuota-extraUsed),carryoverRemaining=Math.max(0,carryoverQuota-carryUsed),holidayQuota=priorHolidayRemaining+holidays.length,holidayUsed=currentHolidayUsed,holidayRemaining=Math.max(0,priorHolidayRemaining+holidays.length-currentHolidayUsed),finalRemaining=weeklyRemaining+extraRemaining+carryoverRemaining+holidayRemaining,totalEntitlement=weeklyQuota+extraQuota+carryoverQuota+holidayQuota,totalUsed=weeklyUsed+extraUsed+carryUsed+holidayUsed;return{quota:totalEntitlement,used:totalUsed,remaining:finalRemaining,finalRemaining,totalEntitlement,totalUsed,weeklyQuota,weeklyUsed,weeklyRemaining,extraQuota,extraUsed,extraRemaining,carryoverQuota,carryUsed,carryoverRemaining,holidays,holidayQuota,holidayUsed,holidayRemaining,priorHolidayRemaining}}
+function offBalanceFor(name,y,m,depth=0){const month=y+'-'+pad(m),parts=monthParts(y,m),manual=state.offAllowances?.[name+'|'+month],extraQuota=name==='김은진'?parts.extra:0,totalGeneral=manual??(name==='김은진'?parts.sundays+parts.extra:state.monthlyOff??8),weeklyQuota=Math.max(0,totalGeneral-extraQuota),monthRecords=Object.entries(state.records||{}).filter(([k,r])=>k.startsWith(name+'|'+month+'-')&&r.shift==='휴무'),weeklyUsed=monthRecords.filter(([,r])=>!r.holidayCredit&&(!r.offSource||r.offSource==='weekly')).length,extraUsed=monthRecords.filter(([,r])=>r.offSource==='extra').length,carryUsed=monthRecords.filter(([,r])=>r.offSource==='carryover').length,holidays=Object.entries(combinedHolidays()).filter(([d])=>d.startsWith(month+'-')).sort(),currentHolidayUsed=holidays.filter(([d])=>creditUsage(name,d).length>0).length;let carryoverQuota=0,priorHolidayRemaining=0;if(depth<120&&month>(state.carryoverStart||'2026-09')){const prev=previousMonth(y,m);if((prev.y>2025)&&monthTracked(name,prev.y,prev.m)){const p=offBalanceFor(name,prev.y,prev.m,depth+1);carryoverQuota=p.weeklyRemaining+p.extraRemaining+p.carryoverRemaining;priorHolidayRemaining=p.holidayRemaining}}const weeklyRemaining=Math.max(0,weeklyQuota-weeklyUsed),extraRemaining=Math.max(0,extraQuota-extraUsed),carryoverRemaining=Math.max(0,carryoverQuota-carryUsed),holidayQuota=priorHolidayRemaining+holidays.length,holidayUsed=currentHolidayUsed,holidayRemaining=Math.max(0,priorHolidayRemaining+holidays.length-currentHolidayUsed),finalRemaining=weeklyRemaining+extraRemaining+carryoverRemaining+holidayRemaining,totalEntitlement=weeklyQuota+extraQuota+carryoverQuota+holidayQuota,totalUsed=weeklyUsed+extraUsed+carryUsed+holidayUsed;return{quota:totalEntitlement,used:totalUsed,remaining:finalRemaining,finalRemaining,totalEntitlement,totalUsed,weeklyQuota,weeklyUsed,weeklyRemaining,extraQuota,extraUsed,extraRemaining,carryoverQuota,carryUsed,carryoverRemaining,holidays,holidayQuota,holidayUsed,holidayRemaining,priorHolidayRemaining}}
 function offBalance(name){return offBalanceFor(name,viewYear,viewMonth)}
 function employeeProfile(name){return{hireDate:'',annualOverride:0,...(state.employeeProfiles?.[name]||{})}}
 function monthDiff(a,b){return(b.getFullYear()-a.getFullYear())*12+b.getMonth()-a.getMonth()-(b.getDate()<a.getDate()?1:0)}
